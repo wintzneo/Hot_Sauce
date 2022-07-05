@@ -1,24 +1,26 @@
-// Requis
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require("cors")
 
-// Routes
-const userRoutes = require("./routes/user");
+const path = require("path");
 
 //Création d'application express
 const app = express();
 
+//Import des routes
+const userRoutes = require("./routes/user");
+
 //Connection à la base de donnée MongoDB
-mongoose.connect('mongodb+srv://wintzneo:pm40334033@cluster0.clqmrrp.mongodb.net/?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+mongoose
+  .connect(
+    "mongodb+srv://wintzneo:pm40334033@cluster0.clqmrrp.mongodb.net/?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then(() => console.log("Connexion à MongoDB réussie !"))
+  .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 //Header pour contourner erreurs de CORS
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -29,12 +31,13 @@ mongoose.connect('mongodb+srv://wintzneo:pm40334033@cluster0.clqmrrp.mongodb.net
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
   next();
-});*/
-
-app.use(cors())
+});
 
 //Rendre la requete exploitable
 app.use(bodyParser.json());
+
+//Gestion de la ressource image de façon statique
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 //Routes attendues
 app.use("/api/auth", userRoutes);
