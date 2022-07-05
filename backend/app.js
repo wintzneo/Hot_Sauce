@@ -9,6 +9,7 @@ const app = express();
 
 //Import des routes
 const userRoutes = require("./routes/user");
+const sauceRoutes = require("./routes/sauce");
 
 //Connection à la base de donnée MongoDB
 mongoose
@@ -41,5 +42,6 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 //Routes attendues
 app.use("/api/auth", userRoutes);
+app.use("/api/sauces", sauceRoutes);
 
 module.exports = app;
